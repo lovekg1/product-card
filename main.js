@@ -95,15 +95,9 @@ function handleToggleEmptyCart() {
 
 }
 
-function handleAddCardItem(img, name, price) {
+function handleAddCardItem(img, name, price, color) {
     let productItems = document.querySelectorAll('.product-item')
     let existingCartItem = cartItems.find(item => item.img === img && item.name === name && item.price === price)
-
-
-    // productItems.forEach(item => {
-    //     const inputQuantity = item.querySelector('.product-item__quantity input[type="number"]')
-    //     arrInputValue.push(inputQuantity.value)
-    // })
 
     if (existingCartItem) {
         const index = cartItems.findIndex(item => item.img === img && item.name === name && item.price === price)
@@ -114,9 +108,12 @@ function handleAddCardItem(img, name, price) {
             alert('Sản phảm đã hết')
         }
 
+        // Cập nhật lại giá trị cho color
+        cartItems[index].color = color
+
     } else {
         // Set giá trị hiện tại của inputQuantity vào key quantity
-        cartItems.push({ img, name, price, quantity: 1 })
+        cartItems.push({ img, name, price, color, quantity: 1 })
     }
     let cartItemHtmls = cartItems.map((item) => {
         return `<li class="product-item">
@@ -143,7 +140,7 @@ function handleAddCardItem(img, name, price) {
             <div class="product-item__color-and-quantity">
                 <div class="product-item__color">
                     Màu:
-                    <span class="color-text">Bạc</span>
+                    <span class="color-text">${item.color}</span>
                 </div>
                 <div class="product-item__quantity">
                     <div class="minus">
@@ -206,10 +203,40 @@ addCartBtns.forEach((addCartBtn) => {
         const cardImage = card.querySelector('img').src
         const cardName = card.querySelector('.card__title').innerText
         const cardPrice = card.querySelector('.card__price').innerText
+        const cardColor = card.querySelector('.card__color-active .color__text')
 
-        handleAddCardItem(cardImage, cardName, cardPrice)
+        if (!cardColor) {
+            alert('Hãy chọn số lượng và size trước khi thêm sản phẩm vào giỏ hàng')
+        } else {
+            const cardColorText = cardColor.innerText
+            handleAddCardItem(cardImage, cardName, cardPrice, cardColorText)
+        }
+
+
     })
 })
+
+// Active color và size của card
+const cardList = document.querySelectorAll('.card')
+
+cardList.forEach(card => {
+    const spanColorList = card.querySelectorAll('.green, .red, .black');
+    spanColorList.forEach(span => {
+        span.onclick = () => {
+            // Xóa class card__color-active của các phần tử span khác
+            Array.from(spanColorList).forEach(otherSpan => {
+                if (otherSpan !== span && otherSpan.classList.contains('card__color-active')) {
+                    otherSpan.classList.remove('card__color-active')
+                }
+            })
+
+            // Thêm class card__color-active cho phần tử span hiện tại
+            span.classList.toggle('card__color-active')
+        }
+    })
+})
+
+
 
 
 

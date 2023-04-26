@@ -150,6 +150,18 @@ body {
     background-color: black;
 }
 
+.card__color-active {
+    border: 1px solid white;
+}
+
+.card__color span.black {
+    background-color: black;
+}
+
+.card__color .color__text {
+    opacity: 0;
+}
+
 .card__action button {
     padding: 10px 20px;
     outline: none;
